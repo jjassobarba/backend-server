@@ -1,1 +1,1 @@
-module.exports.SEED = 'seed-any';
+module.exports.SEED = 'seedany';
