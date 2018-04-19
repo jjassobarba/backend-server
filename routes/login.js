@@ -38,18 +38,18 @@ async function verify(token) {
     }
 }
 
-app.post('/google', async (req, res) => {
+app.post('/google', async(req, res) => {
     var token = req.body.token;
 
     var googleUser = await verify(token)
-                    .catch(e => {
-                        return res.status(403).json({
-                            ok: false,
-                            mensaje: 'Token invalido'
-                        });
-                    });
+        .catch(e => {
+            return res.status(403).json({
+                ok: false,
+                mensaje: 'Token invalido'
+            });
+        });
 
-    Usuario.findOne({email: googleUser.email}, (err, usuarioDB) => {
+    Usuario.findOne({ email: googleUser.email }, (err, usuarioDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -66,16 +66,16 @@ app.post('/google', async (req, res) => {
                 });
             } else {
                 var token = jwt.sign({
-                    usuario: usuarioBD
+                    usuario: usuarioDB
                 }, SEED, {
                     expiresIn: 14400
                 });
-        
+
                 res.status(200).json({
                     ok: true,
-                    usuario: usuarioBD,
+                    usuario: usuarioDB,
                     token: token,
-                    id: usuarioBD._id
+                    id: usuarioDB._id
                 });
             }
         } else {
@@ -84,20 +84,20 @@ app.post('/google', async (req, res) => {
             usuario.email = googleUser.email;
             usuario.img = googleUser.img;
             usuario.google = true,
-            usuario.password = ':)';
+                usuario.password = ':)';
 
             usuario.save((err, usuarioDB) => {
                 var token = jwt.sign({
-                    usuario: usuarioBD
+                    usuario: usuarioDB
                 }, SEED, {
                     expiresIn: 14400
                 });
-        
+
                 res.status(200).json({
                     ok: true,
-                    usuario: usuarioBD,
+                    usuario: usuarioDB,
                     token: token,
-                    id: usuarioBD._id
+                    id: usuarioDB._id
                 });
             });
         }
